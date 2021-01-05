@@ -169,8 +169,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 LogX('[ index ][ pullTables ] ZipArchive: ' . $extractPath . '/' . $file[0]);
 
                 unlink($filename);
-                unlink($extractPath . '/' . $file[0]);
-                rmdir($extractPath);
+                //unlink($extractPath . '/' . $file[0]);
+                //rmdir($extractPath);
                 LogX('[ index ][ pullTables ] Unlink: ' . $filename);
                 LogX('[ index ][ pullTables ] Unlink: ' . $extractPath . '/' . $file[0]);
                 LogX('[ index ][ pullTables ] Rmdir: ' . $extractPath);
