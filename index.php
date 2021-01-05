@@ -44,10 +44,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             LogX('[ index ][ getTables ] Exception: ' . $e->getMessage());
         }
         //取数据表交集
-        $intersect = array_intersect($localTables, $remoteTables);
+        $intersect = array_intersect(array_column($localTables, 'TABLE_NAME'), array_column($remoteTables, 'TABLE_NAME'));
         $tables = array();
         foreach($intersect as $item) {
-            $tables[$item['TABLE_NAME']] = true;
+            $tables[$item] = true;
         }
         foreach($localTables as &$table) {
             $table['FLAG'] = isset($tables[$table['TABLE_NAME']]) ? false : true;

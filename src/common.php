@@ -55,3 +55,17 @@ if(!function_exists('decrypt')) {
         return ($method === 'AESx') ? AESx::Dec($data) : RSAx::Dec($data);
     }
 }
+if(!function_exists('array_column')) {
+    /**
+     * 简单模拟一下 array_column 函数，因为php5.5以下版本没有此函数
+     */
+    function array_column($input, $column) {
+        $arr = [];
+        foreach($input as $value) {
+            if(isset($value[$column])) {
+                $arr[] = $value[$column];
+            }
+        }
+        return $arr;
+    }
+}
