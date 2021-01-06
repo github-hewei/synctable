@@ -33,7 +33,15 @@ class GlobalModel {
             foreach($rows as $key => $value) {
                 $line = [];
                 foreach($value as $item) {
-                    $line[] = db::instance()->quote($item);
+                    if(is_null($item)) {            //NULL类型
+                        array_push($line, 'NULL');
+                    } elseif(is_int($item)) {       //整数类型
+                        array_push($line, $item);
+                    } elseif(is_float($item)) {     //浮点数类型
+                        array_push($line, $item);
+                    } else {                        //字符串类型
+                        array_push($line, db::instance()->quote($item));
+                    }
                 }
                 $tmpArr[] = sprintf("(%s)", implode(",", $line));
                 if(($key + 1) % 2000 === 0) {
