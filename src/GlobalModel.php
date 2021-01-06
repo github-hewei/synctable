@@ -7,6 +7,16 @@ class GlobalModel {
     public static function getTables() {
         $sql = "SELECT TABLE_NAME,TABLE_ROWS FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . DB_NAME . "'";
         $rows = db::instance()->query($sql)->fetchAll();
+
+        //通过 INFORMATION_SCHEMA.TABLES 表查询数据条数不准确
+        //所以每个表单独查询一次
+        foreach($rows as &$item) {
+            $sql = sprintf("select count(1) from `%s`", $item['TABLE_NAME']);
+            $row = db::instance()->query($sql)->fetch(PDO::FETCH_NUM);
+            $item['TABLE_ROWS'] = intval($row[0]);
+        }
+        unset($item);
+
         return $rows;
     }
 
