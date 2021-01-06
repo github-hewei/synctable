@@ -7,14 +7,6 @@ class GlobalModel {
     public static function getTables() {
         $sql = "SELECT TABLE_NAME,TABLE_ROWS FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . DB_NAME . "'";
         $rows = db::instance()->query($sql)->fetchAll();
-
-        foreach($rows as &$item) {
-            $sql = sprintf("select count(1) from `%s`", $item['TABLE_NAME']);
-            $row = db::instance()->query($sql)->fetch(PDO::FETCH_NUM);
-            $item['TABLE_ROWS'] = (int)$row[0];
-        }
-        unset($item);
-
         return $rows;
     }
 
@@ -41,7 +33,15 @@ class GlobalModel {
             foreach($rows as $key => $value) {
                 $line = [];
                 foreach($value as $item) {
-                    $line[] = db::instance()->quote($item);
+                    if(is_null($item)) {            //NULL类型
+                        array_push($line, 'NULL');
+                    } elseif(is_int($item)) {       //整数类型
+                        array_push($line, $item);
+                    } elseif(is_float($item)) {     //浮点数类型
+                        array_push($line, $item);
+                    } else {                        //字符串类型
+                        array_push($line, db::instance()->quote($item));
+                    }
                 }
                 $tmpArr[] = sprintf("(%s)", implode(",", $line));
                 if(($key + 1) % 2000 === 0) {
