@@ -91,7 +91,7 @@ if($action === 'getTables') {
 
         $zip = new ZipArchive();
         if($zip->open($filename, ZipArchive::CREATE) !== true) {
-            echo json(array('code' => 0, 'msg' => '创建压缩包失败'));
+            echo encrypt(json(array('code' => 0, 'msg' => '创建压缩包失败')));
             exit;
         }
         $zip->addFile($file, pathinfo($file, PATHINFO_BASENAME));
@@ -115,7 +115,7 @@ if($action === 'getTables') {
     }catch(\Exception $e) {
         LogX('[ api ][ pullTables ] Exception: ' . $e->getMessage());
         LogX('[ api ][ pullTables ] End');
-        echo json(array('code' => 0, 'msg' => $e->getMessage()));
+        echo encrypt(json(array('code' => 0, 'msg' => $e->getMessage())));
         exit;
     }
 } else {
